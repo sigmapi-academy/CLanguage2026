@@ -85,12 +85,12 @@ void deleteANode(struct Node **head, int sv)
         printf("\nList is empty!\n");
         return;
     }
-    
+
     struct Node *t = *head, *p;
     // First node
     if (t->data == sv)
     {
-        *head = (*head) ->next;
+        *head = (*head)->next;
         printf("\nDeleted node: %d", t->data);
         free(t);
         return; // local t will be deleted after this.
@@ -108,18 +108,83 @@ void deleteANode(struct Node **head, int sv)
     }
     printf("\n%d is not present in the list", sv);
 }
-
 void deleteNodeAfterANode(struct Node **head, int sv)
 {
     // if second node is present then deletion is possible
-    // hw
+    if (*head == NULL)
+    {
+        printf("\nList is empty!\n");
+        return;
+    }
+    struct Node *t = *head;
+    for (; t; t = t->next)
+    {
+        if (t->data == sv)
+        {
+            if (t->next == NULL)
+            {
+                printf("\n%d is the last node; no node exists after it.", sv);
+                return;
+            }
+            struct Node *delNode = t->next;
+            t->next = delNode->next;
+            delNode->next = NULL;
+            printf("\nDeleted node: %d", delNode->data);
+            free(delNode);
+            return;
+        }
+    }
+    printf("\n%d is not present in the list", sv);
 }
+// void deleteNodeAfterANode(struct Node **head, int sv)
+// {
+//     // if second node is present then deletion is possible
+//     // hw
+// }
+
+// void deleteNodeBeforeANode(struct Node **head, int sv)
+// {
+//     // First node cannot be deleted.
+//     // hw
+// }
 
 void deleteNodeBeforeANode(struct Node **head, int sv)
 {
     // First node cannot be deleted.
-    // hw
+    if (*head == NULL)
+    {
+        printf("\nList is empty!\n");
+        return;
+    }
+    if ((*head)->data == sv)
+    {
+        printf("\n%d is the first node; no node exists before it.", sv);
+        return;
+    }
+    struct Node *t = (*head)->next;
+    struct Node *p = *head;
+    struct Node *pp = NULL;
+    for (; t; pp = p, p = t, t = t->next)
+    {
+        if (t->data == sv)
+        {
+            if (p == *head)
+            {
+                *head = t;
+            }
+            else
+            {
+                pp->next = t;
+            }
+            printf("\nDeleted node: %d", p->data);
+            p->next = NULL;
+            free(p);
+            return;
+        }
+    }
+    printf("\n%d is not present in the list", sv);
 }
+ 
 
 void insertNodeAfterANode(struct Node **head, int nv, int data)
 {
@@ -159,6 +224,11 @@ void insertNodeAtPosition(struct Node **head, int pos, int data)
     // otherwise print appropriate message
 }
 
+void reverseList(struct Node **head)
+{
+    // Write your code here.
+}
+
 void display(struct Node *head)
 {
     if (head == NULL)
@@ -187,6 +257,8 @@ int main(int argc, char const *argv[])
         printf("\nPress 5 to delete node from head");
         printf("\nPress 6 to delete node from tail");
         printf("\nPress 7 to delete a node entered by the user");
+        printf("\nPress 8 to delete a node after a given node");
+        printf("\nPress 9 to delete a node before a given node");
         printf("\nPress 0 to exit");
         printf("\nEnter your choice: ");
         scanf("%d", &choice);
@@ -223,6 +295,16 @@ int main(int argc, char const *argv[])
             printf("Enter search value: ");
             scanf("%d", &sv);
             deleteANode(&head, sv);
+            break;
+        case 8:
+            printf("Enter search value: ");
+            scanf("%d", &sv);
+            deleteNodeAfterANode(&head, sv);
+            break;
+        case 9:
+            printf("Enter search value: ");
+            scanf("%d", &sv);
+            deleteNodeBeforeANode(&head, sv);
             break;
         case 0:
             printf("\nGood bye!\n");
